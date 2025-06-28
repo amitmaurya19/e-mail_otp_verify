@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import './SignupForm.css';
@@ -8,6 +8,11 @@ const OTPForm = ({ email }) => {
   const [otp, setOtp] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   const isValidOTP = otp.length === 6 && /^\d+$/.test(otp);
 
@@ -16,8 +21,7 @@ const OTPForm = ({ email }) => {
     try {
       const res = await axios.post('http://localhost:5000/api/auth/verify-otp', { email, otp });
       if (res.data.success) {
-        Swal.fire('✅ OTP Verified!', 'You are now signed in!', 'success');
-        // Save to localStorage
+        Swal.fire('🎉 Verified', 'OTP matched successfully!', 'success');
         localStorage.setItem('userEmail', email);
         navigate('/profile');
       } else {
@@ -30,17 +34,23 @@ const OTPForm = ({ email }) => {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && isValidOTP) handleVerifyOTP();
+  };
+
   return (
     <div>
       <h2 className="signup-heading">Enter Your OTP</h2>
       <label className="signup-label">OTP</label>
       <input
+        ref={inputRef}
         type="text"
         maxLength="6"
         placeholder="Enter 6-digit OTP"
         className="signup-input"
         value={otp}
         onChange={(e) => setOtp(e.target.value)}
+        onKeyDown={handleKeyDown}
         disabled={loading}
       />
       <button
