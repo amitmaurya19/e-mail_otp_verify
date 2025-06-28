@@ -14,9 +14,15 @@ const Profile = () => {
     } else {
       setEmail(userEmail);
       const [username] = userEmail.split('@');
-      setName(username.charAt(0).toUpperCase() + username.slice(1));
+      const formatted = username
+        .replace(/[^a-zA-Z]/g, ' ')
+        .split(' ')
+        .filter(Boolean)
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+      setName(formatted || username);
     }
-  }, []);
+  }, [navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem('userEmail');
@@ -26,14 +32,14 @@ const Profile = () => {
   return (
     <div className="profile-page">
       <div className="profile-card">
-        <img
-          src={`https://ui-avatars.com/api/?name=${name}&background=7e22ce&color=fff&rounded=true&size=100`}
-          alt="Avatar"
-          className="avatar"
-        />
+        <div className="letter-avatar">
+          {email?.charAt(0)?.toUpperCase() || 'U'}
+        </div>
         <h2 className="profile-name">{name}</h2>
         <p className="profile-email">{email}</p>
-        <button className="logout-button" onClick={handleLogout}>Logout</button>
+        <button className="logout-button" onClick={handleLogout}>
+          Logout
+        </button>
       </div>
     </div>
   );
