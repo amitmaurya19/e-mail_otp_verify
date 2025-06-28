@@ -1,12 +1,13 @@
-// OTPForm.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import './SignupForm.css';
+import { useNavigate } from 'react-router-dom';
 
 const OTPForm = ({ email }) => {
   const [otp, setOtp] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const isValidOTP = otp.length === 6 && /^\d+$/.test(otp);
 
@@ -15,7 +16,10 @@ const OTPForm = ({ email }) => {
     try {
       const res = await axios.post('http://localhost:5000/api/auth/verify-otp', { email, otp });
       if (res.data.success) {
-        Swal.fire('🎉 Verified', 'OTP matched successfully!', 'success');
+        Swal.fire('✅ OTP Verified!', 'You are now signed in!', 'success');
+        // Save to localStorage
+        localStorage.setItem('userEmail', email);
+        navigate('/profile');
       } else {
         Swal.fire('Invalid OTP ❌', res.data.error, 'error');
       }
@@ -29,7 +33,6 @@ const OTPForm = ({ email }) => {
   return (
     <div>
       <h2 className="signup-heading">Enter Your OTP</h2>
-
       <label className="signup-label">OTP</label>
       <input
         type="text"
@@ -40,7 +43,6 @@ const OTPForm = ({ email }) => {
         onChange={(e) => setOtp(e.target.value)}
         disabled={loading}
       />
-
       <button
         className={`signup-button green ${!isValidOTP || loading ? 'disabled' : ''}`}
         disabled={!isValidOTP || loading}
