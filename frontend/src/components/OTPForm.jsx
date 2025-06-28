@@ -2,25 +2,29 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import './SignupForm.css'; // Reusing same styles
+import './SignupForm.css';
 
 const OTPForm = ({ email }) => {
   const [otp, setOtp] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const isValidOTP = otp.length === 6 && /^\d+$/.test(otp);
 
   const handleVerifyOTP = async () => {
+    setLoading(true);
     try {
       const res = await axios.post('http://localhost:5000/api/auth/verify-otp', { email, otp });
       if (res.data.success) {
-        Swal.fire('✅ OTP Verified!', 'You are now signed in!', 'success');
+        Swal.fire('🎉 Verified', 'OTP matched successfully!', 'success');
       } else {
-        Swal.fire('❌ Invalid OTP', res.data.error, 'error');
+        Swal.fire('Invalid OTP ❌', res.data.error, 'error');
       }
     } catch (err) {
-      Swal.fire('🚫 Error', err.response?.data?.error || 'Something went wrong', 'error');
+      Swal.fire('Error', err.response?.data?.error || 'Try again later', 'error');
+    } finally {
+      setLoading(false);
     }
   };
-
-  const isValidOTP = otp.length === 6 && /^\d+$/.test(otp); // 6 digits only
 
   return (
     <div>
@@ -34,14 +38,15 @@ const OTPForm = ({ email }) => {
         className="signup-input"
         value={otp}
         onChange={(e) => setOtp(e.target.value)}
+        disabled={loading}
       />
 
       <button
-        className={`signup-button ${isValidOTP ? 'green' : 'disabled'}`}
-        disabled={!isValidOTP}
+        className={`signup-button green ${!isValidOTP || loading ? 'disabled' : ''}`}
+        disabled={!isValidOTP || loading}
         onClick={handleVerifyOTP}
       >
-        Verify OTP
+        {loading ? <div className="spinner"></div> : 'Verify OTP'}
       </button>
     </div>
   );
