@@ -1,0 +1,78 @@
+/* SignupForm.css */
+
+.signup-heading {
+  font-size: 26px;
+  font-weight: 700;
+  color: #7e22ce;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.signup-label {
+  font-weight: 500;
+  font-size: 14px;
+  margin-top: 15px;
+  margin-bottom: 6px;
+  display: block;
+  color: #6b7280;
+}
+
+.signup-input {
+  width: 100%;
+  padding: 11px 14px;
+  font-size: 15px;
+  background-color: #f9fafb;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  color: #111827;
+}
+
+.signup-input::placeholder {
+  color: #9ca3af;
+}
+
+.signup-input:focus {
+  border-color: #7e22ce;
+  box-shadow: 0 0 0 3px rgba(126, 34, 206, 0.2);
+}
+
+.signup-button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 25px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+}
+
+.signup-button.purple {
+  background-color: #7e22ce;
+}
+
+.signup-button.purple:hover {
+  background-color: #6b21a8;
+  transform: scale(1.03);
+}
+/* Add these to bottom of SignupForm.css */
+
+.signup-button.green {
+  background-color: #10b981; /* Sea green */
+}
+
+.signup-button.green:hover {
+  background-color: #059669;
+  transform: scale(1.03);
+}
+
+.signup-button.disabled {
+  background-color: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+}

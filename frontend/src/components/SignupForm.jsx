@@ -1,48 +1,41 @@
+// SignupForm.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import './SignupForm.css';
 
-function SignupForm({ setOtpSent, setEmail }) {
+const SignupForm = ({ setOtpSent, setEmail }) => {
   const [inputEmail, setInputEmail] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSendOTP = async () => {
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/send-otp`, {
-        email: inputEmail,
-      });
-      setEmail(inputEmail);
+      const res = await axios.post('http://localhost:5000/api/auth/send-otp', { email: inputEmail });
+      Swal.fire('Success 🎉', res.data.message, 'success');
       setOtpSent(true);
-
-      Swal.fire({
-        title: 'OTP Sent!',
-        text: `OTP has been sent to ${inputEmail}`,
-        icon: 'success',
-        confirmButtonText: 'OK',
-      });
+      setEmail(inputEmail);
     } catch (err) {
-      Swal.fire({
-        title: 'Error!',
-        text: 'Failed to send OTP. Please try again.',
-        icon: 'error',
-        confirmButtonText: 'Retry',
-      });
+      Swal.fire('Oops!', err.response?.data?.error || 'Error sending OTP', 'error');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Signup</h2>
+    <div>
+      <h2 className="signup-heading">Signup with Email OTP</h2>
+
+      <label className="signup-label">Email Address</label>
       <input
         type="email"
-        placeholder="Enter email"
+        placeholder="you@example.com"
+        className="signup-input"
         value={inputEmail}
         onChange={(e) => setInputEmail(e.target.value)}
-        required
       />
-      <button type="submit">Send OTP</button>
-    </form>
+
+      <button className="signup-button purple" onClick={handleSendOTP}>
+        Send OTP
+      </button>
+    </div>
   );
-}
+};
 
 export default SignupForm;

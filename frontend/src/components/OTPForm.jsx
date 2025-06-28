@@ -1,50 +1,50 @@
+// OTPForm.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import './SignupForm.css'; // Reusing same styles
 
-function OTPForm({ email }) {
+const OTPForm = ({ email }) => {
   const [otp, setOtp] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleVerifyOTP = async () => {
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/verify-otp`, {
-        email,
-        otp,
-      });
-
+      const res = await axios.post('http://localhost:5000/api/auth/verify-otp', { email, otp });
       if (res.data.success) {
-        Swal.fire({
-          title: 'Success!',
-          text: 'OTP Verified Successfully 🎉',
-          icon: 'success',
-          confirmButtonText: 'Continue',
-        });
-        // Optional: Redirect or do something here
+        Swal.fire('✅ OTP Verified!', 'You are now signed in!', 'success');
+      } else {
+        Swal.fire('❌ Invalid OTP', res.data.error, 'error');
       }
     } catch (err) {
-      Swal.fire({
-        title: 'Invalid OTP 😢',
-        text: 'Please try again.',
-        icon: 'error',
-        confirmButtonText: 'Retry',
-      });
+      Swal.fire('🚫 Error', err.response?.data?.error || 'Something went wrong', 'error');
     }
   };
 
+  const isValidOTP = otp.length === 6 && /^\d+$/.test(otp); // 6 digits only
+
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Verify OTP</h2>
+    <div>
+      <h2 className="signup-heading">Enter Your OTP</h2>
+
+      <label className="signup-label">OTP</label>
       <input
         type="text"
-        placeholder="Enter OTP"
+        maxLength="6"
+        placeholder="Enter 6-digit OTP"
+        className="signup-input"
         value={otp}
         onChange={(e) => setOtp(e.target.value)}
-        required
       />
-      <button type="submit">Verify</button>
-    </form>
+
+      <button
+        className={`signup-button ${isValidOTP ? 'green' : 'disabled'}`}
+        disabled={!isValidOTP}
+        onClick={handleVerifyOTP}
+      >
+        Verify OTP
+      </button>
+    </div>
   );
-}
+};
 
 export default OTPForm;

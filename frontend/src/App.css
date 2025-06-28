@@ -1,7 +1,19 @@
-#root {
+/* App.css */
 
-  margin: 0 auto;
-
-
+.app-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: linear-gradient(to bottom right, #ffffff, #e9d5ff, #d1fae5);
 }
 
+.card-wrapper {
+  background-color: white;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 420px;
+}
