@@ -7,8 +7,9 @@
 
 2. Create a `.env` file inside the `backend` folder:
 
-   EMAIL=yourgmail@gmail.com  
-   EMAIL_PASSWORD=your_16_digit_app_password
+   PORT=5000
+   EMAIL_USER=example@gmail.com(sender email)
+   EMAIL_PASS=16digitpassword(no spaces)
 
    👉 Get your app password from: https://myaccount.google.com/apppasswords  
    (Make sure 2-Step Verification is enabled)
