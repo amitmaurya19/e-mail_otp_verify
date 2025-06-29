@@ -17,9 +17,13 @@ const OTPForm = ({ email }) => {
   const isValidOTP = otp.length === 6 && /^\d+$/.test(otp);
 
   const handleVerifyOTP = async () => {
+    if (!isValidOTP) return;
     setLoading(true);
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/send-otp`, { email, otp });
+      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/verify-otp`, {
+        email,
+        otp,
+      });
       if (res.data.success) {
         Swal.fire('🎉 Verified', 'OTP matched successfully!', 'success');
         localStorage.setItem('userEmail', email);
