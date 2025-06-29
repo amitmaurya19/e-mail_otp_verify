@@ -19,7 +19,7 @@ const OTPForm = ({ email }) => {
   const handleVerifyOTP = async () => {
     setLoading(true);
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/verify-otp`, { email, otp });
+      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/send-otp`, { email, otp });
       if (res.data.success) {
         Swal.fire('🎉 Verified', 'OTP matched successfully!', 'success');
         localStorage.setItem('userEmail', email);
